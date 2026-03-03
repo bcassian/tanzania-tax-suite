@@ -1,4 +1,8 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface AppCardProps {
   title: string;
@@ -9,10 +13,21 @@ interface AppCardProps {
 }
 
 export default function AppCard({ title, description, href, badge, icon }: AppCardProps) {
+  const [navigating, setNavigating] = useState(false);
+  const pathname = usePathname();
+
+  // Reset navigating state when route changes (we've arrived or come back)
+  useEffect(() => {
+    setNavigating(false);
+  }, [pathname]);
+
   return (
     <Link
       href={href}
-      className="block bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:border-[#006233]/30 transition-all group"
+      onClick={() => setNavigating(true)}
+      className={`block bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:border-[#006233]/30 transition-all group ${
+        navigating ? 'pointer-events-none opacity-75' : ''
+      }`}
     >
       <div className="flex items-start gap-4">
         <div className="text-3xl">{icon}</div>
@@ -29,7 +44,11 @@ export default function AppCard({ title, description, href, badge, icon }: AppCa
           </div>
           <p className="text-sm text-gray-500 mt-1">{description}</p>
         </div>
-        <span className="text-gray-300 group-hover:text-[#006233] transition-colors text-lg">›</span>
+        {navigating ? (
+          <span className="w-5 h-5 border-2 border-[#006233] border-t-transparent rounded-full animate-spin flex-shrink-0 mt-0.5" />
+        ) : (
+          <span className="text-gray-300 group-hover:text-[#006233] transition-colors text-lg">›</span>
+        )}
       </div>
     </Link>
   );

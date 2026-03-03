@@ -1,12 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs';
 import Sidebar from './Sidebar';
 
+const SIDEBAR_DISMISSED_KEY = 'sidebar-dismissed';
+
 export default function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Auto-open sidebar on tool pages if user hasn't dismissed it
+  useEffect(() => {
+    const isToolPage = pathname !== '/' && !pathname.startsWith('/_');
+    const dismissed = localStorage.getItem(SIDEBAR_DISMISSED_KEY);
+    if (isToolPage && !dismissed) {
+      setSidebarOpen(true);
+    }
+  }, [pathname]);
+
+  const handleSidebarClose = useCallback(() => {
+    setSidebarOpen(false);
+    localStorage.setItem(SIDEBAR_DISMISSED_KEY, '1');
+  }, []);
 
   return (
     <>
@@ -49,7 +67,7 @@ export default function Header() {
         </div>
       </header>
 
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar isOpen={sidebarOpen} onClose={handleSidebarClose} />
     </>
   );
 }
