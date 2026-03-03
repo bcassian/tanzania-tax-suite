@@ -58,7 +58,7 @@ export async function getDatabasePages(): Promise<NotionPage[]> {
       data_source_id: DATABASE_ID,
       start_cursor: cursor,
       page_size: 100,
-      sorts: [{ property: 'title', direction: 'ascending' }],
+      sorts: [{ property: 'Page', direction: 'ascending' }],
     });
 
     for (const result of response.results) {
