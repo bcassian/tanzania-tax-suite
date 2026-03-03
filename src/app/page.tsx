@@ -16,6 +16,13 @@ const apps = [
     icon: '🧾',
   },
   {
+    title: 'Master Tax Guide',
+    description: 'Comprehensive Tanzania tax reference — income tax, VAT, withholding, stamp duty and more. Always up to date.',
+    href: '/tax-guide',
+    badge: 'New',
+    icon: '📖',
+  },
+  {
     title: 'Payroll Manager',
     description: 'Bulk payroll calculations for multiple employees. Export to PDF or CSV.',
     href: '#',
